@@ -17,9 +17,6 @@ def desenhar():
     canvas.delete(linha_anterior)
     linha_anterior = linha
 
-# def terminar_desenho(event):
-#     canvas.delete(linha)
-
 janela = tk.Tk()
 janela.title("Desenho")
 janela.geometry("800x600")
@@ -29,6 +26,5 @@ canvas.pack(fill=tk.BOTH, expand=True)
 
 canvas.bind("<Button-1>", iniciar_desenho)
 canvas.bind("<B1-Motion>", atualizar_posicao)
-# canvas.bind("<ButtonRelease-1>", terminar_desenho)
 
 janela.mainloop()

@@ -8,24 +8,6 @@ janela = tk.Tk()
 janela.title("Minha janela")
 janela.geometry("1350x455")
 
-# botao = tk.Button(janela, text="Clique aqui", command=mostrar_mensagem)
-# botao.pack(pady=20)
-
-# texto = tk.Text(janela)
-# texto.pack(fill=tk.BOTH, expand=True)
-
-
-# texto.tag_configure("Grande", font=("Arial", 25))
-
-# texto.insert(tk.END, "Pontos sorteados: \nPontos que caíram na lagoa: \nÁrea do retângulo: \nÁrea da lagoa: ", "Grande")
-
-# texto.configure(state="disabled")
-
-# scroll_bar = tk.Scrollbar(janela, command=texto.yview, width=10)
-# scroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
-# scroll_bar.place(relheight=1, relx=1, anchor="ne")
-# texto.config(yscrollcommand=scroll_bar.set)
-
 def iniciar_desenho(event):
     # Declaração de variáveis globais para armazenar as coordenadas iniciais do mouse
     global x_inicial, y_inicial
