@@ -1,0 +1,2 @@
+# Calcular-area-irregular-sorteando-pontos-aleatorios
+ Esses códigos são parte de um programa de desenho interativo que permite ao usuário criar formas na tela usando o mouse e calcular a área desse desenho.  Esses códigos demonstram como a biblioteca tkinter do Python pode ser usada para criar programas de desenho interativos. Eles também mostram como os eventos do mouse podem ser usados para controlar o desenho.
