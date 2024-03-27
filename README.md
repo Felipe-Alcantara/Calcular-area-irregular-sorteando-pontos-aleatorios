@@ -1,7 +1,7 @@
 # Calcular-area-irregular-sorteando-pontos-aleatorios
  Esses códigos são parte de um programa de desenho interativo que permite ao usuário criar formas na tela usando o mouse e calcular a área desse desenho.  Esses códigos demonstram como a biblioteca tkinter do Python pode ser usada para criar programas de desenho interativos. Eles também mostram como os eventos do mouse podem ser usados para controlar o desenho.
 
-1. **Desenhar linhas**: Este código permite ao usuário desenhar linhas na tela arrastando o mouse. As linhas são desenhadas entre o ponto onde o botão do mouse foi pressionado e o ponto onde o botão do mouse foi solto.
+# **Desenhar linhas**: Este código permite ao usuário desenhar linhas na tela arrastando o mouse. As linhas são desenhadas entre o ponto onde o botão do mouse foi pressionado e o ponto onde o botão do mouse foi solto.
 
 1. Primeiro, ele importa a biblioteca `tkinter` e define algumas variáveis globais que serão usadas para armazenar as coordenadas do mouse e a linha atualmente sendo desenhada.
 
@@ -20,7 +20,7 @@
 Este código é um programa simples de desenho que usa a biblioteca `tkinter` do Python para criar uma interface gráfica. Ele permite ao usuário desenhar linhas na tela arrastando o mouse. Aqui está o que cada parte do código faz:
 
 
-2. **Desenhar retas usando o mesmo ponto**: Este código é uma extensão do primeiro, permitindo ao usuário desenhar múltiplas linhas a partir de um único ponto de partida. As linhas são desenhadas entre o ponto onde o botão do mouse foi pressionado pela primeira vez e o ponto onde o mouse está atualmente.
+# **Desenhar retas usando o mesmo ponto**: Este código é uma extensão do primeiro, permitindo ao usuário desenhar múltiplas linhas a partir de um único ponto de partida. As linhas são desenhadas entre o ponto onde o botão do mouse foi pressionado pela primeira vez e o ponto onde o mouse está atualmente.
 
 1. Ele define uma função `mostrar_mensagem()` que exibe uma caixa de mensagem quando chamada. No entanto, esta função não é usada no restante do código.
 
@@ -42,7 +42,7 @@ Este código é um programa simples de desenho que usa a biblioteca `tkinter` do
 
 Este código é uma extensão do primeiro código. Ele também é um programa de desenho que usa a biblioteca `tkinter` do Python para criar uma interface gráfica. No entanto, este código tem algumas funcionalidades adicionais:
 
-3. **Tela dividida desenhando retângulo para calcular a área**: Este código divide a tela em duas partes e permite ao usuário desenhar retângulos na parte inferior da tela. Ele calcula e desenha um retângulo delimitador ao redor das linhas desenhadas quando o botão do mouse é solto.
+# **Tela dividida desenhando retângulo para calcular a área**: Este código divide a tela em duas partes e permite ao usuário desenhar retângulos na parte inferior da tela. Ele calcula e desenha um retângulo delimitador ao redor das linhas desenhadas quando o botão do mouse é solto.
 
 1. Primeiro, ele importa a biblioteca `tkinter`.
 
@@ -62,7 +62,7 @@ Este código é uma extensão do primeiro código. Ele também é um programa de
 
 Este código é um programa de desenho que usa a biblioteca `tkinter` do Python para criar uma interface gráfica. Ele permite ao usuário desenhar retângulos na tela arrastando o mouse.
 
-4. **Tela separada + desenho com retângulo funcionando**: Este código é uma extensão do terceiro, adicionando a funcionalidade de desenhar retângulos na tela. Ele também exibe as coordenadas atuais do mouse na tela.
+# **Tela separada + desenho com retângulo funcionando**: Este código é uma extensão do terceiro, adicionando a funcionalidade de desenhar retângulos na tela. Ele também exibe as coordenadas atuais do mouse na tela.
 
 1. Primeiro, ele importa a biblioteca `tkinter`.
 
@@ -85,6 +85,6 @@ Este código é um programa de desenho que usa a biblioteca `tkinter` do Python 
 
 9. Finalmente, ele entra no loop principal do `tkinter` com `root.mainloop()`, que mantém a janela aberta e responde aos eventos do mouse.
 
-Este código é um programa de desenho que usa a biblioteca `tkinter` do Python para criar uma interface gráfica. Ele permite ao usuário desenhar retângulos na tela arrastando o mouse.
+# Este código é um programa de desenho que usa a biblioteca `tkinter` do Python para criar uma interface gráfica. Ele permite ao usuário desenhar retângulos na tela arrastando o mouse.
 
 Esses códigos demonstram como a biblioteca `tkinter` do Python pode ser usada para criar programas de desenho interativos. Eles também mostram como os eventos do mouse podem ser usados para controlar o desenho.
