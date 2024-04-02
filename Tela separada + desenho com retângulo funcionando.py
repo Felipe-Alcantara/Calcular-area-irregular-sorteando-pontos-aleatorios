@@ -29,14 +29,8 @@ root = tk.Tk()
 canvas = tk.Canvas(root, bg="white")
 canvas.pack(fill=tk.BOTH, expand=True)
 
-# Adiciona um texto acima do canvas e muda sua posição
-texto = canvas.create_text(10, 10, text="Pontos sorteados: ", font=("Arial", 20), anchor="nw")
-
-# Após a conclusão do desenho e antes da geração dos pontos aleatórios, você pode adicionar mais texto ao canvas
-canvas.create_text(10, 80, text="Outro texto que você deseja exibir", font=("Arial", 14), anchor="nw")
-
-# Certifique-se de que o texto esteja acima de tudo no canvas
-canvas.tag_raise(texto)
+# Adiciona um texto para mostrar o número de pontos sorteados na tela
+num_pontos_texto = canvas.create_text(10, 10, text="Pontos sorteados: 0", font=("Arial", 16), anchor="nw")
 
 # Configurações iniciais
 half_width = root.winfo_screenwidth() / 2
@@ -44,6 +38,7 @@ half_height = root.winfo_screenheight() / 2
 is_drawing = False
 drawing_completed = False
 points = []
+num_pontos = 0
 
 # Desenha a linha horizontal central
 stroke_line(0, half_height, root.winfo_screenwidth(), half_height)
@@ -71,7 +66,7 @@ def on_mouse_move(event):
 
 # Função chamada quando o botão do mouse é solto
 def on_mouse_up(event):
-    global is_drawing, drawing_completed, points
+    global is_drawing, drawing_completed, points, num_pontos
     is_drawing = False
 
     if drawing_completed or not points:
@@ -93,9 +88,9 @@ def on_mouse_up(event):
 
 # Função para gerar pontos até que toda a área seja preenchida
 def generate_points_until_filled():
-    global points, drawing_completed
+    global points, drawing_completed, num_pontos
 
-    num_points = 10
+    num_points = 100
     point_counter = 0
     while not drawing_completed:
         min_x, min_y = float('inf'), float('inf')
@@ -126,6 +121,10 @@ def generate_points_until_filled():
 
         # Atualiza o canvas para mostrar os pontos gerados
         canvas.update()
+        
+        # Atualiza o número de pontos sorteados na tela
+        num_pontos += num_points
+        canvas.itemconfig(num_pontos_texto, text=f"Pontos sorteados: {num_pontos}")
 
     # Printa a quantidade total de pontos gerados
     print(f"Gerados {len(points)} pontos.")
