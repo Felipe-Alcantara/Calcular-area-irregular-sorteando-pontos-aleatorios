@@ -1,19 +1,48 @@
 import tkinter as tk
+import random
 
 # Função para desenhar uma linha
 def stroke_line(x1, y1, x2, y2):
     canvas.create_line(x1, y1, x2, y2, width=2, capstyle=tk.ROUND)
 
-# Inicializa a janela e o canvas
+# Função para verificar se um ponto está dentro de um polígono
+def is_point_inside_polygon(x, y, polygon):
+    n = len(polygon)
+    inside = False
+    p1x, p1y = polygon[0]
+    for i in range(n+1):
+        p2x, p2y = polygon[i % n]
+        if y > min(p1y, p2y):
+            if y <= max(p1y, p2y):
+                if x <= max(p1x, p2x):
+                    if p1y != p2y:
+                        xinters = (y-p1y)*(p2x-p1x)/(p2y-p1y)+p1x
+                    if p1x == p2x or x <= xinters:
+                        inside = not inside
+        p1x, p1y = p2x, p2y
+    return inside
+
+# Inicializa a janela
 root = tk.Tk()
+
+# Inicializa o canvas
 canvas = tk.Canvas(root, bg="white")
 canvas.pack(fill=tk.BOTH, expand=True)
+
+# Adiciona um texto acima do canvas e muda sua posição
+texto = canvas.create_text(10, 10, text="Pontos sorteados: ", font=("Arial", 20), anchor="nw")
+
+# Após a conclusão do desenho e antes da geração dos pontos aleatórios, você pode adicionar mais texto ao canvas
+canvas.create_text(10, 80, text="Outro texto que você deseja exibir", font=("Arial", 14), anchor="nw")
+
+# Certifique-se de que o texto esteja acima de tudo no canvas
+canvas.tag_raise(texto)
 
 # Configurações iniciais
 half_width = root.winfo_screenwidth() / 2
 half_height = root.winfo_screenheight() / 2
 is_drawing = False
-drawing_completed = False # Adicionado para controlar se o desenho já foi concluído
+drawing_completed = False
 points = []
 
 # Desenha a linha horizontal central
@@ -21,10 +50,6 @@ stroke_line(0, half_height, root.winfo_screenwidth(), half_height)
 
 # Cria um texto vazio para as coordenadas do mouse
 mouse_coords = canvas.create_text(half_width, half_height - 20, text="", fill="black")
-
-# Cria um texto acima da linha
-texto = tk.Label(root, text="Pontos sorteados: ", bg="White", font=("Arial", 40))
-texto.place(x=half_width - 740, y=half_height - 500, anchor="center")
 
 # Função chamada quando o botão do mouse é pressionado
 def on_mouse_down(event):
@@ -46,7 +71,7 @@ def on_mouse_move(event):
 
 # Função chamada quando o botão do mouse é solto
 def on_mouse_up(event):
-    global is_drawing, drawing_completed, points # Adicionar points como global
+    global is_drawing, drawing_completed, points
     is_drawing = False
 
     if drawing_completed or not points:
@@ -61,8 +86,20 @@ def on_mouse_up(event):
         min_x, min_y = min(min_x, x), min(min_y, y)
         max_x, max_y = max(max_x, x), max(max_y, y)
 
-    print(min_x, min_y, max_x, max_y)
     canvas.create_rectangle(min_x, min_y, max_x, max_y, width=2)
+
+    # Gera pontos aleatórios dentro do retângulo
+    num_points = 50
+    random_points = [(random.uniform(min_x, max_x), random.uniform(min_y, max_y)) for _ in range(num_points)]
+
+    # Verifica se cada ponto está dentro ou fora da forma
+    for point in random_points:
+        x, y = point
+        is_inside = is_point_inside_polygon(x, y, points)
+        if is_inside:
+            canvas.create_oval(x-2, y-2, x+2, y+2, fill="green")  # Ponto dentro do polígono
+        else:
+            canvas.create_oval(x-2, y-2, x+2, y+2, fill="red")    # Ponto fora do polígono
 
     points = []
     drawing_completed = True
