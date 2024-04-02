@@ -90,7 +90,11 @@ def on_mouse_up(event):
 def generate_points_until_filled():
     global points, drawing_completed, num_pontos
 
-    num_points = 100
+# O número de pontos a serem gerados em cada iteração.
+# Este valor pode ser ajustado conforme necessário para controlar a velocidade e precisão do preenchimento da área.
+# Valores maiores podem preencher a área mais rapidamente, mas requerem mais recursos computacionais.
+# Valores menores podem resultar em preenchimento mais lento e menos preciso da área.
+    num_points = 50
     point_counter = 0
     while not drawing_completed:
         min_x, min_y = float('inf'), float('inf')
