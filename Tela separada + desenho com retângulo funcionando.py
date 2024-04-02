@@ -72,22 +72,18 @@ def on_mouse_up(event):
 
     # Chama a função para gerar pontos até que toda a área seja preenchida
     generate_points_until_filled()
-
+red_points_counter = 0
+green_points_counter = 0
 # Função para gerar pontos até que toda a área seja preenchida
 def generate_points_until_filled():
-    global points, drawing_completed, num_pontos, pausar_geracao
-
-# O número de pontos a serem gerados em cada iteração.
-# Este valor pode ser ajustado conforme necessário para controlar a velocidade e precisão do preenchimento da área.
-# Valores maiores podem preencher a área mais rapidamente, mas requerem mais recursos computacionais.
-# Valores menores podem resultar em preenchimento mais lento e menos preciso da área.
-    num_points = 50
+    global points, drawing_completed, num_pontos, pausar_geracao, started, red_points_counter, green_points_counter
+    num_points = 10
     point_counter = 0
+
     while not drawing_completed:
         if pausar_geracao:
             return  # Retorna se a geração de pontos deve ser pausada
 
-        # Restante do código para gerar pontos
         min_x, min_y = float('inf'), float('inf')
         max_x, max_y = float('-inf'), float('-inf')
 
@@ -103,10 +99,15 @@ def generate_points_until_filled():
             point_counter += 1
             if is_inside:
                 canvas.create_oval(x-2, y-2, x+2, y+2, fill="green")  # Ponto dentro do polígono
-                print(f"Ponto {point_counter} adicionado dentro do polígono")
+                green_points_counter += 1
             else:
                 canvas.create_oval(x-2, y-2, x+2, y+2, fill="red")    # Ponto fora do polígono
-                print(f"Ponto {point_counter} adicionado fora do polígono")
+                red_points_counter += 1
+
+        if red_points_counter > 0:
+            canvas.itemconfig(red_points_text, text=f"Pontos vermelhos: {red_points_counter}")
+        if green_points_counter > 0:
+            canvas.itemconfig(green_points_text, text=f"Pontos verdes: {green_points_counter}")
 
         red_points = [point for point in random_points if not is_point_inside_polygon(point[0], point[1], points)]
         if not red_points:
@@ -126,6 +127,12 @@ canvas.pack(fill=tk.BOTH, expand=True)
 
 # Adiciona um texto para mostrar o número de pontos sorteados na tela
 num_pontos_texto = canvas.create_text(10, 10, text="Pontos sorteados: 0", font=("Arial", 16), anchor="nw")
+
+# Adiciona texto para mostrar o número de pontos vermelhos
+red_points_text = canvas.create_text(10, 30, text="Pontos vermelhos: 0", font=("Arial", 16), anchor="nw")
+
+# Adiciona texto para mostrar o número de pontos verdes
+green_points_text = canvas.create_text(10, 50, text="Pontos verdes: 0", font=("Arial", 16), anchor="nw")
 
 # Adiciona botões de pausar e retomar
 botao_pausar = tk.Button(root, text="Pausar", command=pausar)
