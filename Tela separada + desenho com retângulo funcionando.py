@@ -112,8 +112,10 @@ def generate_points_until_filled():
             is_inside = is_point_inside_polygon(x, y, points)
             if is_inside:
                 canvas.create_oval(x-2, y-2, x+2, y+2, fill="green")  # Ponto dentro do polígono
+                print("Ponto adicionado dentro do polígono")
             else:
                 canvas.create_oval(x-2, y-2, x+2, y+2, fill="red")    # Ponto fora do polígono
+                print("Ponto adicionado fora do polígono")
         
         # Verifica se ainda há pontos vermelhos sendo gerados
         red_points = [point for point in random_points if not is_point_inside_polygon(point[0], point[1], points)]
