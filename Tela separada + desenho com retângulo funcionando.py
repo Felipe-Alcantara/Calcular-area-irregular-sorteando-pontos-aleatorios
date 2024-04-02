@@ -88,21 +88,43 @@ def on_mouse_up(event):
 
     canvas.create_rectangle(min_x, min_y, max_x, max_y, width=2)
 
-    # Gera pontos aleatórios dentro do retângulo
-    num_points = 50
-    random_points = [(random.uniform(min_x, max_x), random.uniform(min_y, max_y)) for _ in range(num_points)]
+    # Chama a função para gerar pontos até que toda a área seja preenchida
+    generate_points_until_filled()
 
-    # Verifica se cada ponto está dentro ou fora da forma
-    for point in random_points:
-        x, y = point
-        is_inside = is_point_inside_polygon(x, y, points)
-        if is_inside:
-            canvas.create_oval(x-2, y-2, x+2, y+2, fill="green")  # Ponto dentro do polígono
-        else:
-            canvas.create_oval(x-2, y-2, x+2, y+2, fill="red")    # Ponto fora do polígono
+# Função para gerar pontos até que toda a área seja preenchida
+def generate_points_until_filled():
+    global points, drawing_completed
 
-    points = []
-    drawing_completed = True
+    num_points = 10
+    while not drawing_completed:
+        min_x, min_y = float('inf'), float('inf')
+        max_x, max_y = float('-inf'), float('-inf')
+
+        for x, y in points:
+            min_x, min_y = min(min_x, x), min(min_y, y)
+            max_x, max_y = max(max_x, x), max(max_y, y)
+
+        random_points = [(random.uniform(min_x, max_x), random.uniform(min_y, max_y)) for _ in range(num_points)]
+        
+        # Verifica se cada ponto está dentro ou fora da forma
+        for point in random_points:
+            x, y = point
+            is_inside = is_point_inside_polygon(x, y, points)
+            if is_inside:
+                canvas.create_oval(x-2, y-2, x+2, y+2, fill="green")  # Ponto dentro do polígono
+            else:
+                canvas.create_oval(x-2, y-2, x+2, y+2, fill="red")    # Ponto fora do polígono
+        
+        # Verifica se ainda há pontos vermelhos sendo gerados
+        red_points = [point for point in random_points if not is_point_inside_polygon(point[0], point[1], points)]
+        if not red_points:
+            drawing_completed = True
+
+        # Atualiza o canvas para mostrar os pontos gerados
+        canvas.update()
+
+    # Printa a quantidade total de pontos gerados
+    print(f"Gerados {len(points)} pontos.")
 
 # Associa os eventos do mouse às funções correspondentes
 canvas.bind("<Button-1>", on_mouse_down)
