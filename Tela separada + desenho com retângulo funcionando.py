@@ -83,7 +83,7 @@ green_points_counter = 0
 # Função para gerar pontos até que toda a área seja preenchida
 def generate_points_until_filled():
     global points, drawing_completed, num_pontos, pausar_geracao, started, red_points_counter, green_points_counter
-    num_points = 40
+    num_points = 1000
     point_counter = 0
 
     while not drawing_completed:
@@ -126,6 +126,8 @@ def generate_points_until_filled():
 
 # Inicializa a janela
 root = tk.Tk()
+root.title("Calcular a área com pontos aleatórios")
+root.geometry("1920x1080")
 
 # Inicializa o canvas
 canvas = tk.Canvas(root, bg="white")
