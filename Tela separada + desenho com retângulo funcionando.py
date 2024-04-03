@@ -34,12 +34,18 @@ def retomar():
     generate_points_until_filled()
 
 # Função chamada quando o botão do mouse é pressionado
+drawing_started = False
+
 def on_mouse_down(event):
-    global is_drawing, drawing_completed
-    if event.y < half_height or drawing_completed:
+    global is_drawing, drawing_completed, drawing_started
+    if drawing_completed or drawing_started:
         return
+    if event.y < half_height:
+        return
+    drawing_started = True
     is_drawing = True
     points.append((event.x, event.y))
+
 
 # Função chamada quando o mouse se move
 def on_mouse_move(event):
@@ -77,7 +83,7 @@ green_points_counter = 0
 # Função para gerar pontos até que toda a área seja preenchida
 def generate_points_until_filled():
     global points, drawing_completed, num_pontos, pausar_geracao, started, red_points_counter, green_points_counter
-    num_points = 10
+    num_points = 40
     point_counter = 0
 
     while not drawing_completed:
