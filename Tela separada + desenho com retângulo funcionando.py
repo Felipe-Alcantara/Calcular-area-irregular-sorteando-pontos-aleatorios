@@ -132,7 +132,8 @@ green_points_counter = 0
 # Função para gerar pontos até que toda a área seja preenchida
 def generate_points_until_filled():
     global points, drawing_completed, num_pontos, pausar_geracao, started, red_points_counter, green_points_counter
-    num_points = 20
+    if not points:  # Se o polígono ainda não foi desenhado, retorna
+        return
     point_counter = 0
 
     while not drawing_completed:
@@ -173,10 +174,30 @@ def generate_points_until_filled():
         num_pontos += num_points
         canvas.itemconfig(num_pontos_texto, text=f"Pontos sorteados: {num_pontos}")
 
+# Função para atualizar num_points
+def update_num_points():
+    global num_points
+    try:
+        num_points = int(num_points_entry.get())
+        print(f"num_points atualizado para {num_points}")
+        generate_points_until_filled()  # Chama a função para gerar os pontos
+    except ValueError:
+        print("Por favor, insira um número inteiro válido.")
+
+
 # Inicializa a janela
 root = tk.Tk()
 root.title("Calcular a área com pontos aleatórios")
 root.geometry("1920x1080")
+
+# Adiciona um botão para atualizar num_points
+update_button = tk.Button(root, text="Atualizar num_points", command=update_num_points)
+update_button.pack(side=tk.LEFT, padx=10, pady=10)
+
+# Adiciona um campo de entrada para num_points
+num_points_entry = tk.Entry(root)
+num_points_entry.pack(side=tk.LEFT, padx=10, pady=10)
+
 
 # Função para limpar o desenho
 def clear_drawing():
