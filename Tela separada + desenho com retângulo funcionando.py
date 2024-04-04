@@ -57,6 +57,52 @@ def on_mouse_move(event):
     points.append((event.x, event.y))
     stroke_line(points[-2][0], points[-2][1], event.x, event.y)
 
+# Define a função para calcular a área de um retângulo em pixels
+def calcular_area_retangulo(pontos):
+    # Obtenha as coordenadas x e y mínimas e máximas
+    min_x = min(pontos, key=lambda ponto: ponto[0])[0]
+    max_x = max(pontos, key=lambda ponto: ponto[0])[0]
+    min_y = min(pontos, key=lambda ponto: ponto[1])[1]
+    max_y = max(pontos, key=lambda ponto: ponto[1])[1]
+
+    # Calcule a largura e a altura do retângulo
+    largura = max_x - min_x
+    altura = max_y - min_y
+
+    # Calcule a área do retângulo
+    area = largura * altura
+
+    # Retorne a área
+    return area
+
+# Define a função para exibir a área do retângulo na tela
+def exibir_area_retangulo(canvas, pontos):
+    # Calcule a área do retângulo
+    area = calcular_area_retangulo(pontos)
+
+    # Exiba a área na tela
+    canvas.create_text(10, 70, text=f"Área do retângulo: {area} pixels", font=("Arial", 16), anchor="nw")
+
+# Define a função para calcular a área do polígono
+def calcular_area_poligono(pontos_verdes, pontos_totais, area_retangulo):
+    # Calcule a proporção de pontos verdes para pontos totais
+    proporcao = len(pontos_verdes) / len(pontos_totais)
+
+    # Calcule a área do polígono
+    area_poligono = proporcao * area_retangulo
+
+    # Retorne a área do polígono
+    return area_poligono
+
+# Define a função para exibir a área do polígono na tela
+def exibir_area_poligono(canvas, pontos_verdes, pontos_totais, area_retangulo):
+    # Calcule a área do polígono
+    area_poligono = calcular_area_poligono(pontos_verdes, pontos_totais, area_retangulo)
+
+    # Exiba a área do polígono na tela
+    canvas.create_text(10, 100, text=f"Área do polígono: {area_poligono} pixels", font=("Arial", 16), anchor="nw")
+
+
 # Função chamada quando o botão do mouse é solto
 def on_mouse_up(event):
     global is_drawing, drawing_completed, points, num_pontos
@@ -76,14 +122,17 @@ def on_mouse_up(event):
 
     canvas.create_rectangle(min_x, min_y, max_x, max_y, width=2)
 
-    # Chama a função para gerar pontos até que toda a área seja preenchida
+    # Chame a função para exibir a área do retângulo
+    exibir_area_retangulo(canvas, points)
+
+    # Chame a função para gerar pontos até que a área esteja preenchida
     generate_points_until_filled()
 red_points_counter = 0
 green_points_counter = 0
 # Função para gerar pontos até que toda a área seja preenchida
 def generate_points_until_filled():
     global points, drawing_completed, num_pontos, pausar_geracao, started, red_points_counter, green_points_counter
-    num_points = 1000
+    num_points = 20
     point_counter = 0
 
     while not drawing_completed:
@@ -128,6 +177,36 @@ def generate_points_until_filled():
 root = tk.Tk()
 root.title("Calcular a área com pontos aleatórios")
 root.geometry("1920x1080")
+
+# Função para limpar o desenho
+def clear_drawing():
+    global points, drawing_completed, num_pontos, red_points_counter, green_points_counter
+    # Obter todos os itens no canvas
+    all_items = canvas.find_all()
+    # Iterar sobre todos os itens
+    for item in all_items:
+        # Se o item não for um texto, não for a linha horizontal e não for a linha vertical, delete-o
+        if canvas.type(item) != 'text':
+            if canvas.type(item) == 'line':
+                x1, y1, x2, y2 = canvas.coords(item)
+                # Se a linha não for horizontal e não for vertical, delete-a
+                if y1 != y2 and x1 != x2:
+                    canvas.delete(item)
+            else:
+                canvas.delete(item)
+    points = []
+    drawing_completed = False
+    num_pontos = 0
+    red_points_counter = 0
+    green_points_counter = 0
+    drawing_started = False
+    drawing_completed = False
+
+
+
+# Adiciona um botão para limpar o desenho
+botao_limpar = tk.Button(root, text="Limpar", command=clear_drawing)
+botao_limpar.pack(side=tk.LEFT, padx=10, pady=10)
 
 # Inicializa o canvas
 canvas = tk.Canvas(root, bg="white")
