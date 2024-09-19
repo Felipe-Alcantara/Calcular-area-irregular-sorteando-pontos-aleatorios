@@ -1,104 +1,274 @@
-# Calcular Área Irregular Sorteando Pontos Aleatórios
+# Calculando a Área de Formas Irregulares com Pontos Aleatórios
 
-Este repositório contém códigos que fazem parte de um programa de desenho interativo. Ele permite ao usuário criar formas na tela usando o mouse e calcular a área desses desenhos. Os códigos demonstram como a biblioteca `tkinter` do Python pode ser usada para criar programas de desenho interativos e como os eventos do mouse podem ser usados para controlar o desenho.
+Este repositório contém um projeto em Python que permite ao usuário desenhar formas geométricas irregulares em uma interface gráfica e calcular suas áreas usando o método de Monte Carlo com pontos aleatórios. O projeto evoluiu através de três versões distintas:
 
-## Desenhar Linhas
+1. **Versão Inicial (com Bugs)**
+2. **Versão Corrigida**
+3. **Versão Refatorada com Classes**
 
-Este código permite ao usuário desenhar linhas na tela arrastando o mouse. As linhas são desenhadas entre o ponto onde o botão do mouse foi pressionado e o ponto onde o botão do mouse foi solto.
+A seguir, detalhamos cada versão, explicando suas características, problemas identificados e melhorias implementadas.
 
-### Como Funciona
+---
 
-1. **Importação e Definição de Variáveis**: Primeiro, o código importa a biblioteca `tkinter` e define algumas variáveis globais que serão usadas para armazenar as coordenadas do mouse e a linha atualmente sendo desenhada.
+## Índice
 
-2. **Iniciar Desenho**: A função `iniciar_desenho(event)` é chamada quando o botão esquerdo do mouse é pressionado. Ela armazena as coordenadas atuais do mouse nas variáveis `x_inicial` e `y_inicial` e chama a função `desenhar()`.
+- [Introdução](#introdução)
+- [Versão Inicial (com Bugs)](#versão-inicial-com-bugs)
+  - [Descrição](#descrição)
+  - [Problemas Identificados](#problemas-identificados)
+- [Versão Corrigida](#versão-corrigida)
+  - [Melhorias Implementadas](#melhorias-implementadas)
+  - [Como os Problemas Foram Corrigidos](#como-os-problemas-foram-corrigidos)
+- [Versão Refatorada com Classes](#versão-refatorada-com-classes)
+  - [Refatoração Usando Programação Orientada a Objetos](#refatoração-usando-programação-orientada-a-objetos)
+  - [Benefícios da Nova Estrutura](#benefícios-da-nova-estrutura)
+- [Como Executar o Projeto](#como-executar-o-projeto)
+- [Conclusão](#conclusão)
 
-3. **Atualizar Posição**: A função `atualizar_posicao(event)` é chamada quando o mouse é movido enquanto o botão esquerdo está pressionado. Ela atualiza as coordenadas atuais do mouse e deleta a linha anteriormente desenhada antes de chamar a função `desenhar()` novamente.
+---
 
-4. **Desenhar**: A função `desenhar()` desenha uma linha da posição inicial do mouse para a posição atual e deleta a linha anteriormente desenhada.
+## Introdução
 
-5. **Criação de Janela e Canvas**: O código então cria uma janela `tkinter` e um `canvas` onde as linhas serão desenhadas.
+Este projeto tem como objetivo demonstrar como calcular a área de formas geométricas irregulares desenhadas pelo usuário, utilizando pontos aleatórios (método de Monte Carlo). O usuário pode desenhar uma forma na interface gráfica, e o programa estima a área dessa forma gerando pontos aleatórios dentro de um retângulo envolvente e verificando quais pontos estão dentro da forma.
 
-6. **Vinculação de Eventos**: O código vincula os eventos do mouse às funções apropriadas, para que quando o usuário pressione o botão esquerdo do mouse, mova o mouse enquanto o botão está pressionado, ou solte o botão do mouse, as funções correspondentes sejam chamadas.
+O projeto passou por três versões, cada uma aprimorando a anterior em termos de funcionalidade, organização do código e usabilidade.
 
-7. **Loop Principal**: Finalmente, o código entra no loop principal do `tkinter` com `janela.mainloop()`, que mantém a janela aberta e responde aos eventos do mouse.
+---
 
-Este código é um programa simples de desenho que usa a biblioteca `tkinter` do Python para criar uma interface gráfica. Ele permite ao usuário desenhar linhas na tela arrastando o mouse. Cada parte do código tem uma função específica para garantir o funcionamento correto do programa.
+## Versão Inicial (com Bugs)
 
-## Desenhar Retas Usando o Mesmo Ponto
+### Descrição
 
-Este código é uma extensão do primeiro, permitindo ao usuário desenhar múltiplas linhas a partir de um único ponto de partida. As linhas são desenhadas entre o ponto onde o botão do mouse foi pressionado pela primeira vez e o ponto onde o mouse está atualmente.
+A primeira versão do projeto foi uma prova de conceito inicial, implementando a funcionalidade básica de desenho e cálculo de área. O usuário podia desenhar uma forma na metade inferior da janela, e o programa gerava pontos aleatórios para estimar a área.
 
-### Como Funciona
+**Características Principais:**
 
-1. **Mostrar Mensagem**: Ele define uma função `mostrar_mensagem()` que exibe uma caixa de mensagem quando chamada. No entanto, esta função não é usada no restante do código.
+- Desenho de formas livres usando o mouse.
+- Geração de pontos aleatórios dentro do retângulo envolvente.
+- Cálculo da área baseado na proporção de pontos dentro da forma.
 
-2. **Criação de Janela**: Ele cria uma janela `tkinter` com um título e um tamanho específico.
+### Problemas Identificados
 
-3. **Criação de Canvas**: Ele cria um `canvas` onde as linhas serão desenhadas. O `canvas` é configurado para preencher toda a janela e se expandir conforme a janela é redimensionada.
+Apesar de funcional em certos aspectos, a versão inicial apresentava vários problemas que afetavam a execução e a usabilidade:
 
-4. **Vinculação de Eventos**: Ele vincula os eventos do mouse às funções apropriadas. Quando o usuário pressiona o botão esquerdo do mouse, a função `iniciar_desenho(event)` é chamada. Quando o mouse é movido, a função `atualizar_posicao(event)` é chamada. Quando o botão esquerdo do mouse é solto, a função `terminar_desenho(event)` é chamada.
+1. **Variáveis Globais Não Declaradas Adequadamente:**
 
-5. **Iniciar Desenho**: A função `iniciar_desenho(event)` armazena as coordenadas iniciais do mouse e chama a função `desenhar()`.
+   - Variáveis globais eram modificadas dentro de funções sem a declaração `global`, causando comportamentos inesperados.
 
-6. **Atualizar Posição**: A função `atualizar_posicao(event)` atualiza as coordenadas atuais do mouse, deleta a linha anteriormente desenhada e chama a função `desenhar()` novamente.
+2. **Loops Bloqueantes que Congelavam a Interface Gráfica:**
 
-7. **Desenhar**: A função `desenhar()` desenha uma linha da posição inicial do mouse para a posição atual e deleta a linha anteriormente desenhada.
+   - Uso de loops `while` bloqueantes na geração de pontos, impedindo que a interface respondesse a eventos do usuário.
 
-8. **Terminar Desenho**: A função `terminar_desenho(event)` deleta a linha que está sendo desenhada quando o botão esquerdo do mouse é solto.
+3. **Condições de Parada Impraticáveis:**
 
-9. **Loop Principal**: Finalmente, o código entra no loop principal do `tkinter` com `janela.mainloop()`, que mantém a janela aberta e responde aos eventos do mouse.
+   - A condição de parada da geração de pontos dependia de um evento improvável (geração de nenhum ponto fora da forma), resultando em loops infinitos.
 
-Este código é uma extensão do primeiro código. Ele também é um programa de desenho que usa a biblioteca `tkinter` do Python para criar uma interface gráfica. No entanto, este código tem algumas funcionalidades adicionais.
+4. **Atualização Inadequada da Estimativa de Área:**
 
-## Tela Dividida Desenhando Retângulo para Calcular a Área
+   - A estimativa da área não era atualizada continuamente, deixando o usuário sem feedback sobre o cálculo.
 
-Este código divide a tela em duas partes e permite ao usuário desenhar retângulos na parte inferior da tela. Ele calcula e desenha um retângulo delimitador ao redor das linhas desenhadas quando o botão do mouse é solto.
+5. **Inicialização e Reset de Variáveis Inconsistente:**
 
-### Como Funciona
+   - Variáveis não eram inicializadas corretamente ou redefinidas ao limpar o desenho, causando erros e estados inconsistentes.
 
-1. **Importação**: Primeiro, ele importa a biblioteca `tkinter`.
+6. **Estruturação Geral do Código:**
 
-2. **Iniciar Desenho**: A função `iniciar_desenho(event)` é chamada quando o botão esquerdo do mouse é pressionado. Ela armazena as coordenadas atuais do mouse em uma lista chamada `coordenadas`.
+   - Código desorganizado, com funções e variáveis espalhadas, dificultando a leitura, manutenção e depuração.
 
-3. **Desenhar Rastro**: A função `desenhar_rastro(event)` é chamada quando o mouse é movido enquanto o botão esquerdo está pressionado. Ela adiciona as coordenadas atuais do mouse à lista `coordenadas` e desenha uma linha entre as duas últimas coordenadas na lista.
+---
 
-4. **Limpar Rastro**: A função `limpar_rastro(event)` é chamada quando o botão esquerdo do mouse é solto. Ela cria um retângulo que envolve todas as linhas desenhadas e, em seguida, limpa a lista `coordenadas`.
+## Versão Corrigida
 
-5. **Mostrar Coordenadas**: A função `mostrar_coordenadas(event)` é chamada sempre que o mouse é movido. Ela atualiza um rótulo na janela para mostrar as coordenadas atuais do mouse.
+### Melhorias Implementadas
 
-6. **Criação de Janela e Canvas**: O código então cria uma janela `tkinter` e três `canvas` onde as linhas serão desenhadas. Dois dos `canvas` são empacotados à esquerda e à direita, respectivamente, e o terceiro `canvas` é empacotado para preencher o restante do espaço na janela.
+A segunda versão do projeto abordou os problemas identificados na versão inicial, resultando em um código mais funcional e usável.
 
-7. **Vinculação de Eventos**: O código vincula os eventos do mouse às funções apropriadas, para que quando o usuário pressione o botão esquerdo do mouse, mova o mouse enquanto o botão está pressionado, ou solte o botão do mouse, as funções correspondentes sejam chamadas.
+**Principais Melhorias:**
 
-8. **Loop Principal**: Finalmente, o código entra no loop principal do `tkinter` com `janela.mainloop()`, que mantém a janela aberta e responde aos eventos do mouse.
+1. **Declaração Adequada de Variáveis Globais:**
 
-Este código é um programa de desenho que usa a biblioteca `tkinter` do Python para criar uma interface gráfica. Ele permite ao usuário desenhar retângulos na tela arrastando o mouse.
+   - Todas as variáveis globais foram declaradas explicitamente dentro das funções que as modificam, garantindo consistência no estado do programa.
 
-## Tela Separada + Desenho com Retângulo Funcionando
+2. **Uso do Método `after()` do Tkinter:**
 
-Este código é uma extensão do terceiro, adicionando a funcionalidade de desenhar retângulos na tela. Ele também exibe as coordenadas atuais do mouse na tela.
+   - Substituição dos loops bloqueantes pela função `after()`, permitindo que a interface gráfica permaneça responsiva durante a geração de pontos.
 
-### Como Funciona
+3. **Controle de Geração de Pontos pelo Usuário:**
 
-1. **Importação**: Primeiro, ele importa a biblioteca `tkinter`.
+   - Introdução de botões "Pausar" e "Retomar", permitindo que o usuário controle a geração de pontos.
 
-2. **Função Stroke Line**: A função `stroke_line(x1, y1, x2, y2)` é definida para desenhar uma linha no canvas.
+4. **Atualização Contínua da Estimativa de Área:**
 
-3. **Inicialização de Janela e Canvas**: Ele inicializa a janela e o canvas.
+   - A estimativa da área do polígono é atualizada após cada lote de pontos gerados, proporcionando feedback imediato ao usuário.
 
-4. **Configurações Iniciais**: Ele define algumas configurações iniciais, como a metade da largura e altura da tela, uma variável `is_drawing` para rastrear se o usuário está atualmente desenhando, e uma lista `points` para armazenar as coordenadas dos pontos desenhados.
+5. **Inicialização e Reset Correto de Variáveis:**
 
-5. **Desenho de Linha Horizontal**: Ele desenha uma linha horizontal no meio da tela.
+   - Todas as variáveis são inicializadas e redefinidas adequadamente, especialmente ao limpar o desenho.
 
-6. **Criação de Texto Vazio**: Ele cria um texto vazio no canvas para mostrar as coordenadas do mouse.
+6. **Organização e Comentários no Código:**
 
-7. **Funções de Eventos do Mouse**: Ele define várias funções para lidar com eventos do mouse:
-    - `on_mouse_down(event)`: Esta função é chamada quando o botão esquerdo do mouse é pressionado. Ela verifica se o mouse está na metade inferior da tela e, em caso afirmativo, define `is_drawing` como True e adiciona as coordenadas do mouse à lista `points`.
-    - `on_mouse_move(event)`: Esta função é chamada quando o mouse se move. Ela atualiza o texto das coordenadas do mouse e, se o mouse estiver na metade inferior da tela e `is_drawing` for True, adiciona as coordenadas do mouse à lista `points` e desenha uma linha entre o último e o penúltimo ponto.
-    - `on_mouse_up(event)`: Esta função é chamada quando o botão esquerdo do mouse é solto. Ela define `is_drawing` como False, desenha uma linha do último ponto para o primeiro ponto na lista `points`, calcula o retângulo delimitador que envolve todos os pontos na lista `points`, desenha esse retângulo e limpa a lista `points`.
+   - O código foi reorganizado com funções bem definidas e comentários explicativos, melhorando a legibilidade e manutenção.
 
-8. **Associação de Eventos**: Ele associa os eventos do mouse às funções correspondentes.
+### Como os Problemas Foram Corrigidos
 
-9. **Loop Principal**: Finalmente, ele entra no loop principal do `tkinter` com `root.mainloop()`, que mantém a janela aberta e responde aos eventos do mouse.
+- **Variáveis Globais:**
 
-Este código é um programa de desenho que usa a biblioteca `tkinter` do Python para criar uma interface gráfica. Ele permite ao usuário desenhar retângulos na tela arrastando o mouse. Estes códigos demonstram como a biblioteca `tkinter` do Python pode ser usada para criar programas de desenho interativos e como os eventos do mouse podem ser usados para controlar o desenho.
+  As variáveis globais foram declaradas dentro das funções usando a palavra-chave `global`, evitando conflitos e garantindo que o estado global fosse atualizado corretamente.
+
+- **Loops Bloqueantes:**
+
+  O uso do método `after()` do Tkinter permitiu agendar a geração de pontos sem bloquear o loop de eventos da interface gráfica.
+
+- **Condições de Parada:**
+
+  A condição de parada impraticável foi removida, e o controle de geração de pontos foi delegado ao usuário através dos botões de "Pausar" e "Retomar".
+
+- **Atualização da Estimativa de Área:**
+
+  A função de cálculo da área do polígono foi chamada após cada geração de pontos, atualizando a estimativa continuamente.
+
+- **Inicialização de Variáveis:**
+
+  Variáveis como `num_points` foram inicializadas corretamente, e todas as variáveis relevantes foram redefinidas na função de limpeza.
+
+- **Estruturação do Código:**
+
+  O código foi reorganizado, com funções agrupadas logicamente e nomes claros para variáveis e funções.
+
+---
+
+## Versão Refatorada com Classes
+
+### Refatoração Usando Programação Orientada a Objetos
+
+A terceira versão do projeto refatorou o código usando programação orientada a objetos (POO), encapsulando toda a funcionalidade dentro de uma classe.
+
+**Características Principais:**
+
+- **Criação da Classe `AreaCalculatorApp`:**
+
+  - Todos os atributos (dados) e métodos (funções) foram encapsulados dentro da classe.
+
+- **Eliminação de Variáveis Globais:**
+
+  - Variáveis globais foram substituídas por atributos de instância, acessados via `self`.
+
+- **Organização Modular:**
+
+  - Métodos organizados por funcionalidade (eventos do mouse, geração de pontos, cálculo de áreas, atualização da interface).
+
+- **Melhoria na Manutenção e Extensibilidade:**
+
+  - O código orientado a objetos facilita a manutenção e expansão futura, permitindo adicionar novas funcionalidades com facilidade.
+
+### Benefícios da Nova Estrutura
+
+1. **Encapsulamento de Dados e Funções:**
+
+   - Agrupamento lógico de dados e comportamentos relacionados, melhorando a organização do código.
+
+2. **Redução de Erros:**
+
+   - O uso de atributos de instância reduz o risco de conflitos e comportamentos inesperados associados a variáveis globais.
+
+3. **Melhor Legibilidade e Manutenção:**
+
+   - O código está mais limpo e fácil de entender, com responsabilidades bem definidas para cada método.
+
+4. **Facilidade de Expansão:**
+
+   - Novas funcionalidades podem ser adicionadas como métodos ou subclasses, sem impactar negativamente o restante do código.
+
+5. **Uso de Boas Práticas de Programação:**
+
+   - A adoção de POO segue padrões amplamente aceitos na engenharia de software, resultando em um código mais profissional.
+
+---
+
+## Como Executar o Projeto
+
+### Pré-requisitos
+
+- Python 3 instalado em seu sistema.
+- Biblioteca Tkinter (geralmente já incluída com a instalação padrão do Python).
+
+### Passos para Execução
+
+1. **Clone o Repositório:**
+
+   ```bash
+   git clone https://github.com/Felipe-Alcantara/Calcular-area-irregular-sorteando-pontos-aleatorios
+   cd nome-do-repositorio
+   ```
+
+2. **Escolha a Versão:**
+
+   - **Versão Inicial (com Bugs):** Arquivo `versao_inicial.py`
+   - **Versão Corrigida:** Arquivo `versao_corrigida.py`
+   - **Versão com Classes:** Arquivo `area_calculator_app.py`
+
+3. **Execute o Arquivo Desejado:**
+
+   ```bash
+   python area_calculator_app.py
+   ```
+
+   *Substitua `area_calculator_app.py` pelo nome do arquivo da versão que deseja executar.*
+
+### Utilização do Programa
+
+1. **Desenhar a Forma:**
+
+   - Clique e arraste o mouse na metade inferior da janela para desenhar o polígono.
+   - Solte o botão do mouse para finalizar o desenho. O polígono será fechado automaticamente.
+
+2. **Geração de Pontos:**
+
+   - Após finalizar o desenho, o programa começará a gerar pontos aleatórios dentro do retângulo envolvente.
+   - Pontos dentro do polígono são marcados em verde; pontos fora, em vermelho.
+
+3. **Estimativa da Área:**
+
+   - A área do retângulo envolvente e a estimativa da área do polígono são exibidas na tela em centímetros quadrados.
+
+4. **Controles Adicionais:**
+
+   - **Atualizar `num_points`:** Insira um novo valor no campo de entrada e clique em "Atualizar num_points" para alterar o número de pontos gerados por lote.
+   - **Pausar/Retomar:** Use os botões "Pausar" e "Retomar" para controlar a geração de pontos.
+   - **Limpar:** Clique no botão "Limpar" para resetar o desenho e começar novamente.
+
+5. **Log de Eventos:**
+
+   - As ações realizadas são registradas em um log exibido na interface, permitindo acompanhar o histórico de eventos.
+
+---
+
+## Conclusão
+
+Este projeto demonstra a evolução de um aplicativo simples de cálculo de área, destacando a importância de práticas adequadas de programação e organização do código. A transição da versão inicial com bugs para uma versão corrigida e, posteriormente, para uma versão orientada a objetos, evidencia como melhorias estruturais podem impactar positivamente a funcionalidade, usabilidade e manutenção de um software.
+
+**Aprendizados Chave:**
+
+- **Gestão Adequada de Variáveis e Estados:**
+
+  - A importância de declarar variáveis globais e gerenciar estados corretamente para evitar comportamentos inesperados.
+
+- **Interface Gráfica Responsiva:**
+
+  - Uso de métodos assíncronos, como `after()` no Tkinter, para manter a interface responsiva durante operações contínuas.
+
+- **Programação Orientada a Objetos:**
+
+  - Encapsulamento de funcionalidades em classes melhora a organização e facilita a expansão futura do código.
+
+- **Feedback Contínuo ao Usuário:**
+
+  - Atualização regular de informações, como a estimativa de área, melhora a experiência do usuário.
+
+Esperamos que este projeto seja útil como referência para desenvolvedores interessados em interfaces gráficas, cálculos geométricos e boas práticas de programação em Python.
+
+---
+
+**Autor:** Felipe Alcântara Martins (melhorias com ChatGPT)
+
+**Licença:** [MIT](LICENSE)
