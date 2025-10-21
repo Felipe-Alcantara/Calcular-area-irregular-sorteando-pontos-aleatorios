@@ -1,103 +1,123 @@
-# Calculando a Área de Formas Irregulares com Pontos Aleatórios
+# Calculadora de Área com Pontos Aleatórios
 
-Este repositório contém um projeto em Python que permite ao usuário desenhar formas geométricas irregulares em uma interface gráfica e calcular suas áreas usando o método de Monte Carlo com pontos aleatórios. O projeto evoluiu através de três versões distintas:
+Uma aplicação Python com interface gráfica para calcular a área de polígonos irregulares usando o método de Monte Carlo.
 
-1. **Versão Inicial (com Bugs)**
-2. **Versão Corrigida**
-3. **Versão Refatorada com Classes**
+![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)
+![Tkinter](https://img.shields.io/badge/GUI-Tkinter-green.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-A seguir, detalhamos cada versão, explicando suas características, problemas identificados e melhorias implementadas.
+## 📋 Descrição
 
----
+Este projeto permite ao usuário desenhar formas geométricas irregulares em uma interface gráfica e calcular suas áreas usando o método de Monte Carlo com pontos aleatórios. A aplicação gera pontos aleatórios dentro de um retângulo envolvente e verifica quantos caem dentro do polígono desenhado, estimando a área através da proporção de pontos.
 
-## Índice
+## ✨ Funcionalidades
 
-- [Introdução](#introdução)
-- [Versão Inicial (com Bugs)](#versão-inicial-com-bugs)
-  - [Descrição](#descrição)
-  - [Problemas Identificados](#problemas-identificados)
-- [Versão Corrigida](#versão-corrigida)
-  - [Melhorias Implementadas](#melhorias-implementadas)
-  - [Como os Problemas Foram Corrigidos](#como-os-problemas-foram-corrigidos)
-- [Versão Refatorada com Classes](#versão-refatorada-com-classes)
-  - [Refatoração Usando Programação Orientada a Objetos](#refatoração-usando-programação-orientada-a-objetos)
-  - [Benefícios da Nova Estrutura](#benefícios-da-nova-estrutura)
-- [Como Executar o Projeto](#como-executar-o-projeto)
-- [Conclusão](#conclusão)
+- **Desenho Livre**: Desenhe polígonos irregulares com o mouse
+- **Método de Monte Carlo**: Cálculo de área através de pontos aleatórios
+- **Controle de Precisão**: Ajuste o número de pontos por lote
+- **Visualização em Tempo Real**: Veja os pontos sendo gerados (verde = dentro, vermelho = fora)
+- **Controles Interativos**: Pausar/retomar a geração de pontos
+- **Histórico de Cálculos**: Mantenha registro dos desenhos anteriores
+- **Desenho com Eixos Travados**: Pressione Ctrl para travar eixos horizontal ou vertical
+- **Log de Atividades**: Acompanhe todas as ações em tempo real
 
----
+## 🚀 Como Usar
 
-## Introdução
+### Pré-requisitos
 
-Este projeto tem como objetivo demonstrar como calcular a área de formas geométricas irregulares desenhadas pelo usuário, utilizando pontos aleatórios (método de Monte Carlo). O usuário pode desenhar uma forma na interface gráfica, e o programa estima a área dessa forma gerando pontos aleatórios dentro de um retângulo envolvente e verificando quais pontos estão dentro da forma.
+- Python 3.7 ou superior
+- Tkinter (geralmente incluído com Python)
 
-O projeto passou por três versões, cada uma aprimorando a anterior em termos de funcionalidade, organização do código e usabilidade.
+### Instalação
 
----
+1. Clone este repositório:
+```bash
+git clone https://github.com/Felipe-Alcantara/Calcular-area-irregular-sorteando-pontos-aleatorios.git
+cd Calcular-area-irregular-sorteando-pontos-aleatorios
+```
 
-## Versão Inicial (com Bugs)
+2. Execute a aplicação:
+```bash
+python area_calculator.py
+```
 
-### Descrição
+### Instruções de Uso
 
-A primeira versão do projeto foi uma prova de conceito inicial, implementando a funcionalidade básica de desenho e cálculo de área. O usuário podia desenhar uma forma na metade inferior da janela, e o programa gerava pontos aleatórios para estimar a área.
+1. **Desenhar um Polígono**:
+   - Clique e arraste o mouse na área de desenho para criar seu polígono
+   - Solte o botão para fechar automaticamente o polígono
+   - Use Ctrl enquanto desenha para travar em eixos horizontal ou vertical
 
-**Características Principais:**
+2. **Controlar a Geração de Pontos**:
+   - A geração começa automaticamente após desenhar
+   - Use "Pausar" para interromper
+   - Use "Retomar" para continuar
+   - Ajuste o número de pontos por lote no campo de entrada
 
-- Desenho de formas livres usando o mouse.
-- Geração de pontos aleatórios dentro do retângulo envolvente.
-- Cálculo da área baseado na proporção de pontos dentro da forma.
+3. **Limpar e Recomeçar**:
+   - Clique em "Limpar" para apagar o desenho atual
+   - Os cálculos anteriores são salvos no histórico
 
-### Problemas Identificados
+## 🎯 Método de Monte Carlo
 
-Apesar de funcional em certos aspectos, a versão inicial apresentava vários problemas que afetavam a execução e a usabilidade:
+O método de Monte Carlo é uma técnica estatística que usa amostragem aleatória para obter resultados numéricos. Neste projeto:
 
-1. **Variáveis Globais Não Declaradas Adequadamente:**
+1. Um retângulo envolvente é criado ao redor do polígono
+2. Pontos aleatórios são gerados dentro deste retângulo
+3. Cada ponto é testado para verificar se está dentro do polígono
+4. A área é estimada pela fórmula:
 
-   - Variáveis globais eram modificadas dentro de funções sem a declaração `global`, causando comportamentos inesperados.
+   **Área do Polígono = (Pontos Dentro / Total de Pontos) × Área do Retângulo**
 
-2. **Loops Bloqueantes que Congelavam a Interface Gráfica:**
+Quanto mais pontos forem gerados, mais precisa será a estimativa.
 
-   - Uso de loops `while` bloqueantes na geração de pontos, impedindo que a interface respondesse a eventos do usuário.
+## 📊 Interface
 
-3. **Condições de Parada Impraticáveis:**
+A interface é dividida em três seções principais:
 
-   - A condição de parada da geração de pontos dependia de um evento improvável (geração de nenhum ponto fora da forma), resultando em loops infinitos.
+- **Área de Desenho**: Canvas onde você desenha e visualiza os pontos
+- **Controles**: Botões para pausar, retomar, limpar e ajustar parâmetros
+- **Informações**: Exibe estatísticas em tempo real e histórico de cálculos
 
-4. **Atualização Inadequada da Estimativa de Área:**
+## 🛠️ Tecnologias Utilizadas
 
-   - A estimativa da área não era atualizada continuamente, deixando o usuário sem feedback sobre o cálculo.
+- **Python 3**: Linguagem de programação principal
+- **Tkinter**: Biblioteca para interface gráfica
+- **Random**: Geração de pontos aleatórios
 
-5. **Inicialização e Reset de Variáveis Inconsistente:**
+## 📝 Estrutura do Código
 
-   - Variáveis não eram inicializadas corretamente ou redefinidas ao limpar o desenho, causando erros e estados inconsistentes.
+O projeto utiliza Programação Orientada a Objetos com a classe `AreaCalculatorApp` que encapsula toda a lógica da aplicação:
 
-6. **Estruturação Geral do Código:**
+- **Gerenciamento de Estado**: Controle de desenho e geração de pontos
+- **Interface Gráfica**: Configuração completa do layout
+- **Algoritmo Ray Casting**: Verificação de pontos dentro do polígono
+- **Cálculos de Área**: Métodos para retângulo e polígono
 
-   - Código desorganizado, com funções e variáveis espalhadas, dificultando a leitura, manutenção e depuração.
+## 🤝 Contribuindo
 
----
+Contribuições são bem-vindas! Sinta-se à vontade para:
 
-## Versão Corrigida
+1. Fazer um Fork do projeto
+2. Criar uma branch para sua feature (`git checkout -b feature/NovaFuncionalidade`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
+4. Push para a branch (`git push origin feature/NovaFuncionalidade`)
+5. Abrir um Pull Request
 
-### Melhorias Implementadas
+## 📄 Licença
 
-A segunda versão do projeto abordou os problemas identificados na versão inicial, resultando em um código mais funcional e usável.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-**Principais Melhorias:**
+## 👤 Autor
 
-1. **Declaração Adequada de Variáveis Globais:**
+**Felipe Alcantara**
 
-   - Todas as variáveis globais foram declaradas explicitamente dentro das funções que as modificam, garantindo consistência no estado do programa.
+- GitHub: [@Felipe-Alcantara](https://github.com/Felipe-Alcantara)
 
-2. **Uso do Método `after()` do Tkinter:**
+## 🙏 Agradecimentos
 
-   - Substituição dos loops bloqueantes pela função `after()`, permitindo que a interface gráfica permaneça responsiva durante a geração de pontos.
-
-3. **Controle de Geração de Pontos pelo Usuário:**
-
-   - Introdução de botões "Pausar" e "Retomar", permitindo que o usuário controle a geração de pontos.
-
-4. **Atualização Contínua da Estimativa de Área:**
+- Inspirado pelo método de Monte Carlo para cálculos probabilísticos
+- Comunidade Python pela documentação e recursos
 
    - A estimativa da área do polígono é atualizada após cada lote de pontos gerados, proporcionando feedback imediato ao usuário.
 

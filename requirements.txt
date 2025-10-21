@@ -1,0 +1,5 @@
+# Este projeto usa apenas bibliotecas padrão do Python
+# Requisitos: Python 3.7+
+# 
+# tkinter - Interface gráfica (geralmente incluído com Python)
+# random - Geração de números aleatórios (biblioteca padrão)

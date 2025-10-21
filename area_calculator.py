@@ -1,11 +1,25 @@
+"""
+Calculadora de Área com Pontos Aleatórios
+Aplicação para calcular área de polígonos irregulares usando o método de Monte Carlo.
+
+Autor: Felipe Alcantara
+Repositório: Calcular-area-irregular-sorteando-pontos-aleatorios
+"""
+
 import tkinter as tk
 from tkinter import ttk
 import random
 
+
 class AreaCalculatorApp:
+    """
+    Aplicação para calcular áreas de polígonos irregulares desenhados pelo usuário
+    utilizando o método de Monte Carlo (pontos aleatórios).
+    """
+
     def __init__(self):
         # Configurações iniciais
-        self.pixels_per_cm = 100  # Ajuste este valor conforme necessário
+        self.pixels_per_cm = 100  # Escala de conversão pixels para centímetros
         self.num_points = 100  # Número padrão de pontos por lote
 
         # Variáveis de estado
@@ -13,10 +27,10 @@ class AreaCalculatorApp:
         self.drawing_started = False
         self.drawing_completed = False
         self.pausar_geracao = False
-        self.ctrl_pressed = False  # Variável para rastrear se o Ctrl está pressionado
+        self.ctrl_pressed = False  # Rastreia se o Ctrl está pressionado
         self.locked_axis = None  # Eixo travado ('x' ou 'y')
         self.locked_coord = None  # Coordenada travada
-        self.axis_locked = False  # Variável para controlar se o eixo está travado
+        self.axis_locked = False  # Controla se o eixo está travado
 
         # Listas e contadores
         self.points = []
@@ -42,6 +56,7 @@ class AreaCalculatorApp:
         self.root.mainloop()
 
     def setup_interface(self):
+        """Configura toda a interface gráfica da aplicação."""
         # Estilos para os frames
         style = ttk.Style()
         style.configure('TFrame', background='white')
@@ -139,6 +154,7 @@ class AreaCalculatorApp:
         self.log_text.config(state=tk.DISABLED)  # Inicia como somente leitura
 
     def add_controls(self, frame):
+        """Adiciona os botões de controle à interface."""
         # Frame interno para organizar os botões
         buttons_frame = ttk.Frame(frame)
         buttons_frame.pack(pady=5)
@@ -165,9 +181,11 @@ class AreaCalculatorApp:
         botao_limpar.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
 
     def stroke_line(self, x1, y1, x2, y2):
+        """Desenha uma linha no canvas."""
         self.canvas.create_line(x1, y1, x2, y2, width=2, capstyle=tk.ROUND)
 
     def add_log_message(self, message):
+        """Adiciona uma mensagem ao log."""
         self.log_messages.append(message)
         self.log_text.config(state=tk.NORMAL)
         self.log_text.insert(tk.END, message + "\n")
@@ -175,11 +193,13 @@ class AreaCalculatorApp:
         self.log_text.config(state=tk.DISABLED)
 
     def on_ctrl_press(self, event):
+        """Handler para quando a tecla Ctrl é pressionada."""
         if not self.ctrl_pressed:
             self.ctrl_pressed = True
             self.add_log_message("Tecla Ctrl pressionada.")
 
     def on_ctrl_release(self, event):
+        """Handler para quando a tecla Ctrl é solta."""
         self.ctrl_pressed = False
         self.locked_axis = None
         self.locked_coord = None
@@ -189,6 +209,7 @@ class AreaCalculatorApp:
         self.add_log_message("Tecla Ctrl liberada.")
 
     def on_mouse_down(self, event):
+        """Handler para quando o botão do mouse é pressionado."""
         if self.drawing_completed:
             return
         if event.y < self.get_drawing_area_top():
@@ -198,6 +219,7 @@ class AreaCalculatorApp:
         self.points.append((event.x, event.y))
 
     def on_mouse_move(self, event):
+        """Handler para quando o mouse se move enquanto está desenhando."""
         if event.y < self.get_drawing_area_top() or not self.is_drawing:
             return
 
@@ -244,6 +266,7 @@ class AreaCalculatorApp:
             self.stroke_line(prev_x, prev_y, event_x, event_y)
 
     def on_mouse_up(self, event):
+        """Handler para quando o botão do mouse é solto."""
         if not self.is_drawing:
             return
 
@@ -276,11 +299,12 @@ class AreaCalculatorApp:
         self.generate_points()
 
     def get_drawing_area_top(self):
-        # Obtém a posição vertical da área de desenho (abaixo do separador)
+        """Obtém a posição vertical da área de desenho (abaixo do separador)."""
         sash_coords = self.canvas.winfo_rooty() - self.root.winfo_rooty()
         return sash_coords
 
     def calcular_area_retangulo(self):
+        """Calcula a área do retângulo envolvente em cm²."""
         largura = self.max_x - self.min_x
         altura = self.max_y - self.min_y
         # Converte largura e altura em centímetros
@@ -289,9 +313,11 @@ class AreaCalculatorApp:
         return largura_cm * altura_cm  # Área em cm²
 
     def exibir_area_retangulo(self):
+        """Exibe a área do retângulo na interface."""
         self.area_retangulo_label.config(text=f"Área do retângulo: {self.area_retangulo:.2f} cm²")
 
     def exibir_area_poligono(self):
+        """Calcula e exibe a área estimada do polígono usando o método de Monte Carlo."""
         if self.total_points_counter == 0:
             return
         proporcao = self.inside_points_counter / self.total_points_counter
@@ -299,6 +325,16 @@ class AreaCalculatorApp:
         self.area_poligono_label.config(text=f"Área do polígono: {area_poligono:.2f} cm²")
 
     def is_point_inside_polygon(self, x, y):
+        """
+        Verifica se um ponto está dentro do polígono usando o algoritmo Ray Casting.
+        
+        Args:
+            x: Coordenada x do ponto
+            y: Coordenada y do ponto
+            
+        Returns:
+            bool: True se o ponto está dentro do polígono, False caso contrário
+        """
         n = len(self.points)
         inside = False
         p1x, p1y = self.points[0]
@@ -315,11 +351,13 @@ class AreaCalculatorApp:
         return inside
 
     def generate_points(self):
+        """Gera pontos aleatórios e verifica se estão dentro do polígono."""
         if not self.points or self.pausar_geracao or not self.drawing_completed:
             return
 
         # Gera pontos aleatórios
-        random_points = [(random.uniform(self.min_x, self.max_x), random.uniform(self.min_y, self.max_y)) for _ in range(self.num_points)]
+        random_points = [(random.uniform(self.min_x, self.max_x), random.uniform(self.min_y, self.max_y)) 
+                        for _ in range(self.num_points)]
 
         for x, y in random_points:
             self.total_points_counter += 1
@@ -343,6 +381,7 @@ class AreaCalculatorApp:
             self.canvas.after(100, self.generate_points)
 
     def update_num_points(self):
+        """Atualiza o número de pontos a serem gerados por lote."""
         try:
             self.num_points = int(self.num_points_entry.get())
             self.add_log_message(f"Atualizado num_points para {self.num_points}.")
@@ -350,15 +389,18 @@ class AreaCalculatorApp:
             self.add_log_message("Valor inválido para num_points.")
 
     def pausar(self):
+        """Pausa a geração de pontos aleatórios."""
         self.pausar_geracao = True
         self.add_log_message("Pausa solicitada.")
 
     def retomar(self):
+        """Retoma a geração de pontos aleatórios."""
         self.pausar_geracao = False
         self.add_log_message("Retomando a geração de pontos.")
         self.generate_points()
 
     def clear_drawing(self):
+        """Limpa o desenho atual e salva os cálculos."""
         # Salva os cálculos atuais antes de limpar
         if self.drawing_started or self.drawing_completed:
             self.save_current_calculation()
@@ -388,6 +430,7 @@ class AreaCalculatorApp:
         self.add_log_message("Desenho limpo.")
 
     def save_current_calculation(self):
+        """Salva os cálculos do desenho atual no histórico."""
         proporcao = self.inside_points_counter / self.total_points_counter if self.total_points_counter else 0
         area_poligono = proporcao * self.area_retangulo
         calculation = {
@@ -401,6 +444,7 @@ class AreaCalculatorApp:
         self.update_annotations()
 
     def update_annotations(self):
+        """Atualiza a exibição dos cálculos anteriores."""
         self.annotations_text.config(state=tk.NORMAL)
         self.annotations_text.delete(1.0, tk.END)
         for idx, calc in enumerate(self.previous_calculations, 1):
@@ -409,6 +453,7 @@ class AreaCalculatorApp:
                 self.annotations_text.insert(tk.END, f"  {key}: {value}\n")
             self.annotations_text.insert(tk.END, "\n")
         self.annotations_text.config(state=tk.DISABLED)
+
 
 # Inicializa a aplicação
 if __name__ == "__main__":
