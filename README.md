@@ -6,6 +6,25 @@ Uma aplicação Python com interface gráfica para calcular a área de polígono
 ![Tkinter](https://img.shields.io/badge/GUI-Tkinter-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+## Índice
+
+- [Descrição](#descrição)
+- [Funcionalidades](#funcionalidades)
+- [Como Usar](#como-usar)
+   - [Pré-requisitos](#pré-requisitos)
+   - [Instalação](#instalação)
+   - [Instruções de Uso](#instruções-de-uso)
+- [Método de Monte Carlo](#método-de-monte-carlo)
+- [Interface](#interface)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Estrutura do Código](#estrutura-do-código)
+- [Contribuindo](#contribuindo)
+- [Licença](#licença)
+- [Autor](#autor)
+- [Agradecimentos](#agradecimentos)
+- [Versão Refatorada com Classes](#versão-refatorada-com-classes)
+- [Como Executar o Projeto](#como-executar-o-projeto)
+
 ## 📋 Descrição
 
 Este projeto permite ao usuário desenhar formas geométricas irregulares em uma interface gráfica e calcular suas áreas usando o método de Monte Carlo com pontos aleatórios. A aplicação gera pontos aleatórios dentro de um retângulo envolvente e verifica quantos caem dentro do polígono desenhado, estimando a área através da proporção de pontos.
